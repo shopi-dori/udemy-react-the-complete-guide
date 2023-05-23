@@ -10,12 +10,14 @@ function App() {
   const [users, setUsers] = useState(sampleUsers);
 
   const handleAdd = (userName, age) => {
-    const updatedUserList = [
-      ...users,
-      { id: Date.now, userName: userName, age: age },
-    ]
+    setUsers((previousUsers) => {
+      const updatedUserList = [
+        ...previousUsers,
+        { id: Date.now, userName: userName, age: age },
+      ];
 
-    setUsers(updatedUserList);
+      return updatedUserList;
+    });
   };
 
   return (

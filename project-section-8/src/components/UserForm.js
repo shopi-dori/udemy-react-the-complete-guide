@@ -12,27 +12,42 @@ export function UserForm({ onAdd }) {
   const onSubmit = (event) => {
     event.preventDefault();
 
-    validateUser();
+    const isValid = validateUser();
 
-    if (!warning) {
+    if (isValid) {
       onAdd(newUserName, newUserAge);
-    }    
+
+      clearUser();
+    }
+  };
+
+  const clearUser = () => {
+    setNewUserAge('');
+    setNewUserName('');
   };
 
   const validateUser = () => {
+    let isValid = true;
+
     if (!newUserName && !newUserAge) {
       setWarning('Please provide a user name and age');
+      isValid = false;
     } else if (!newUserName) {
       setWarning('Please provide a user name');
+      isValid = false;
     } else if (!newUserAge) {
       setWarning('Please provide a user age');
+      isValid = false;
     } else {
       const numericAge = Number(newUserAge);
 
       if (!numericAge || numericAge < 0) {
         setWarning('Please provide an age greater than or equal to zero');
+        isValid = false;
       }
     }
+
+    return isValid;
   };
 
   const handleUserNameChange = (event) => {
@@ -49,27 +64,41 @@ export function UserForm({ onAdd }) {
 
   return (
     <>
-      <Card title={'New User'}>  
+      <Card title={"New User"}>
         <form onSubmit={onSubmit}>
-          <div className='form-group'>
-            <label htmlFor='userNameInput'>User Name</label>
+          <div className="form-group">
+            <label htmlFor="userNameInput">User Name</label>
             <div>
-              <input id='userNameInput' type='text' value={newUserName} onChange={handleUserNameChange} />
+              <input
+                id="userNameInput"
+                type="text"
+                value={newUserName}
+                onChange={handleUserNameChange}
+              />
             </div>
           </div>
-          <div className='form-group'>
-            <label htmlFor='ageInput'>Age</label>
+          <div className="form-group">
+            <label htmlFor="ageInput">Age</label>
             <div>
-              <input id='ageInput' type='number' value={newUserAge} onChange={handleUserAgeChange} />
+              <input
+                id="ageInput"
+                type="number"
+                value={newUserAge}
+                onChange={handleUserAgeChange}
+              />
             </div>
           </div>
           <div>
-            <button type='submit' className='btn-primary'>Add</button>
+            <button type="submit" className="btn-primary">
+              Add
+            </button>
           </div>
         </form>
       </Card>
 
-      { warning ? <Warning warning={warning} onClose={handleClose}></Warning> : null }
-    </>    
+      {warning ? (
+        <Warning warning={warning} onClose={handleClose}></Warning>
+      ) : null}
+    </>
   );
 }
